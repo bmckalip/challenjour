@@ -7,11 +7,11 @@ class Match:
         self.__request = RequestHandler(region)
         self.update()
 
-    def __init__(self, match):
-        self.__matchID = match.getId()
-        self.__region = match.getRegion()
-        self.__request = RequestHandler(self.__region)
-        self.update()
+#    def __init__(self, match):
+#        self.__matchID = match.getId()
+#        self.__region = match.getRegion()
+#        self.__request = RequestHandler(self.__region)
+#        self.update()
 
     def update(self):
         self.__stats = self.__request.lookupMatch(self.__matchID)

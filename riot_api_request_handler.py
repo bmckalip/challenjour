@@ -2,7 +2,7 @@ import requests
 
 class RequestHandler:
     def __init__(self, region):
-        self.__api_key = open('api_key.txt', 'r').read()
+        self.__api_key = open('api_key.txt', 'r').read().replace(' ', '')
         self.__regions = ('na', 'euw', 'kr')
 
 
@@ -32,6 +32,7 @@ class RequestHandler:
 
     def lookupMatch(self, matchID, params={}):
         url = self.__createURL('/v2.2/match/' + str(matchID))
+        print(url)
         return self.__executeRequest(url, params)
 
 
@@ -41,10 +42,12 @@ class RequestHandler:
 
     def __validateRequest(self, request):
         if request.status_code == 200:
-            return True
+            return 1
+        elif request.status_code == 429:
+            return -1
         else:
             print(request.status_code)
-            return False
+            return 0
 
     def __executeRequest(self, url, params):
         params.update({'api_key': self.__api_key})
@@ -54,7 +57,13 @@ class RequestHandler:
 
         #Validate request
         if self.__validateRequest(request):
+            requestLog = open('requestLog.log', 'a')
+            requestLog.write('Request Succeeded: ' + request.url + '\n')
             return request.json()
-
-
-
+        else:
+            #log failed request
+            errorLog = open('errorLog.log', 'a')
+            requestLog = open('requestLog.log', 'a')
+            failureMessage = 'Request Failed: ' + request.url + ' reason: ' + request.status_code + ' ' + request.reason + '\n'
+            errorLog.write(failureMessage)
+            requestLog.write(failureMessage)

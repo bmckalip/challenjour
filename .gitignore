@@ -3,3 +3,4 @@ api_key.txt
 .idea/
 __pycache__
 challenger matches/
+*.log

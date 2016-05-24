@@ -6,8 +6,9 @@ class Summoner:
         self.__summonerID = summonerID
         self.__region = region
         self.__request = RequestHandler(self.__region)
-        self.__summonerName = self.__request.lookupSummonerById(self.__summonerID)[self.__summonerID]['name']
-        self.__matchlist = Matchlist(self)
+        self.__summoner = self.__request.lookupSummonerById(self.__summonerID)[str(self.__summonerID)]
+        self.__summonerName = self.__summoner['name']
+        self.__matchlist = Matchlist(self.__summonerID, self.__region)
 
     def getID(self):
         return self.__summonerID
