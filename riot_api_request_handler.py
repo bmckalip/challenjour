@@ -59,6 +59,7 @@ class RequestHandler:
         if self.__validateRequest(request):
             requestLog = open('requestLog.log', 'a')
             requestLog.write('Request Succeeded: ' + request.url + '\n')
+            requestLog.close(   )
             return request.json()
         else:
             #log failed request
@@ -67,3 +68,5 @@ class RequestHandler:
             failureMessage = 'Request Failed: ' + request.url + ' reason: ' + request.status_code + ' ' + request.reason + '\n'
             errorLog.write(failureMessage)
             requestLog.write(failureMessage)
+            errorLog.close()
+            requestLog.close()
