@@ -1,21 +1,27 @@
-from challengerList import challengerList
-from riot_api_request_handler import requestHandler
-from summoner import summoner
+from riot_api_request_handler import RequestHandler
+from match import Match
 
-class matchlist:
+class Matchlist():
     def __init__(self, summoner):
-        self.__summonerID = summoner.getID()
-        self.__region = summoner.getRegion()
+        self.__summoner = summoner
+        self.__request = RequestHandler(self.__summoner.getRegion())
         self.update()
 
     def update(self):
-        self.__matchlist = self.__region.lookupMatchlist(self.__summonerID)['matches']
+        matchlist = self.__request.lookupMatchlist(self.__summoner.getID())['matches']
+        self.__matches = []
+        for entry in matchlist:
+            match = Match(entry['matchId'], self.__summoner.getRegion())
+            self.__matches.append(match)
 
-    def getMatchlist(self):
-        return self.__matchlist
+    def getMatches(self):
+        return self.__matches
 
-    def getMatchlistIDs(self):
+    def getMatchIds(self):
         matchIDs = []
-        for match in self.__matchlist:
-            matchIDs.append(match['matchId'])
+        for match in self.__matches:
+            matchIDs.append(match.getId())
         return matchIDs
+
+    def getMatch(self, matchId):
+        pass
