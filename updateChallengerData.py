@@ -7,7 +7,7 @@ regions = ['na', 'euw', 'kr']
 
 for region in regions:
     #update list of challengers
-    players = ChallengerList('na')
+    players = ChallengerList(region)
     challengers = players.getChallengers()
 
     #update list of challenger matchlists
@@ -20,7 +20,7 @@ for region in regions:
         for matchID in matchIDs:
             if matchID not in localMatches:
                 match = Match(matchID, region)
-                print(match.getStats())
+                stats = match.getParticipantStats(player.getID())
             break
         break
     break

@@ -1,4 +1,5 @@
 import requests
+import time, datetime
 
 class RequestHandler:
     def __init__(self, region):
@@ -32,7 +33,6 @@ class RequestHandler:
 
     def lookupMatch(self, matchID, params={}):
         url = self.__createURL('/v2.2/match/' + str(matchID))
-        print(url)
         return self.__executeRequest(url, params)
 
 
@@ -46,10 +46,10 @@ class RequestHandler:
         elif request.status_code == 429:
             return -1
         else:
-            print(request.status_code)
             return 0
 
     def __executeRequest(self, url, params):
+        ts = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         params.update({'api_key': self.__api_key})
         #Validate URL
         if url:
@@ -58,14 +58,15 @@ class RequestHandler:
         #Validate request
         if self.__validateRequest(request):
             requestLog = open('requestLog.log', 'a')
-            requestLog.write('Request Succeeded: ' + request.url + '\n')
-            requestLog.close(   )
+            requestLog.write('[' + ts + '] Request Succeeded: ' + request.url + '\n')
+            requestLog.close()
             return request.json()
         else:
             #log failed request
+
             errorLog = open('errorLog.log', 'a')
             requestLog = open('requestLog.log', 'a')
-            failureMessage = 'Request Failed: ' + request.url + ' reason: ' + request.status_code + ' ' + request.reason + '\n'
+            failureMessage = '[' + str(ts) + '] Request Failed: ' + request.url + ' reason: ' + request.status_code + ' ' + request.reason + '\n'
             errorLog.write(failureMessage)
             requestLog.write(failureMessage)
             errorLog.close()
