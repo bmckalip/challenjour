@@ -1,6 +1,7 @@
 from challengerList import ChallengerList
 from match import Match
 from summoner import Summoner
+from matchParticipant import MatchParticipant
 
 #do this for all supported regions
 regions = ['na', 'euw', 'kr']
@@ -20,7 +21,8 @@ for region in regions:
         for matchID in matchIDs:
             if matchID not in localMatches:
                 match = Match(matchID, region)
-                stats = match.getParticipantStats(player.getID())
+                stats = match.getParticipant(player.getID()).getStats()
+                print(stats)
             break
         break
     break

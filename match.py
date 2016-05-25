@@ -1,4 +1,5 @@
 from riot_api_request_handler import RequestHandler
+from matchParticipant import MatchParticipant
 
 class Match:
     def __init__(self, matchID, region):
@@ -8,11 +9,11 @@ class Match:
         self.update()
 
     def update(self):
-        self.__stats = self.__request.lookupMatch(self.__matchID)
+        self.__matchData = self.__request.lookupMatch(self.__matchID)
         self.__createParticipantList()
 
     def getStats(self):
-        return self.__stats
+        return self.__matchData
 
     def getId(self):
         return self.__matchID
@@ -22,35 +23,12 @@ class Match:
 
     def __createParticipantList(self):
         self.__participants = []
-        for participant in self.__stats['participantIdentities']:
+        for player in self.__matchData['participantIdentities']:
+            stats = self.__matchData['participants'][player['participantId'] - 1]
+            participant = MatchParticipant(player, stats)
             self.__participants.append(participant)
 
-        self.__participantStats = []
-        for stat in self.__stats['participants']:
-            self.__participantStats.append(stat)
-
-    def __findParticipant(self, summonerId):
-        for participant in self.__participants:
-            if (participant['player'])['summonerId'] == int(summonerId):
-                return self.__participantStats[participant['participantId']]
-
     def getParticipant(self, summonerId):
-        return self.__findParticipant(summonerId)
-
-    def getParticipantRunes(self, summonerId):
-        return self.__findParticipant(summonerId)['runes']
-
-    def getParticipantMasteries(self, summonerId):
-        return self.__findParticipant(summonerId)['masteries']
-
-    def getParticipantStats(self, summonerId):
-        return self.__findParticipant(summonerId)['stats']
-
-    def getParticipantTimeline(self, summonerId):
-        return self.__findParticipant(summonerId)['timeline']
-
-    def getParticipantChampionId(self, summonerId):
-        return self.__findParticipant(summonerId)['championId']
-
-    def getParticipantSummonerSpellIds(self, summonerId):
-        return (self.__findParticipant(summonerId)['spell1Id'], self.__findParticipant(summonerId)['spell2Id'])
+        for participant in self.__participants:
+            if (participant.getId()) == int(summonerId):
+                return participant
