@@ -1,7 +1,6 @@
 from challengerList import ChallengerList
 from match import Match
 from summoner import Summoner
-from matchParticipant import MatchParticipant
 
 #do this for all supported regions
 regions = ['na', 'euw', 'kr']
@@ -21,8 +20,9 @@ for region in regions:
         for matchID in matchIDs:
             if matchID not in localMatches:
                 match = Match(matchID, region)
-                stats = match.getParticipant(player.getID()).getStats()
-                print(stats)
+                items = match.getParticipantById(player.getID()).getStats('items')
+                print(items)
+#use breaks here to execute requests only once, otherwise dev key rate limit is maxed out QUICKLY
             break
         break
     break

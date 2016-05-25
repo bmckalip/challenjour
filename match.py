@@ -28,7 +28,7 @@ class Match:
             participant = MatchParticipant(player, stats)
             self.__participants.append(participant)
 
-    def getParticipant(self, summonerId):
+    def getParticipantById(self, summonerId):
         for participant in self.__participants:
             if (participant.getId()) == int(summonerId):
                 return participant
